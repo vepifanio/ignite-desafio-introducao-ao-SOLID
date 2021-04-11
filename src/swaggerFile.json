@@ -1,0 +1,348 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Ignite SOLID Challenge API",
+    "description": "API created for the Ignite SOLID challenge",
+    "contact": {
+      "name": "Victor Epifânio",
+      "email": "vepifanio1@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Create a user",
+        "description": "Create a new user",
+        "requestBody": {
+          "content": {
+              "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "name": "Example Name",
+                "email": "example@mail.com"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "admin": {
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                },
+                "example": {
+                  "id": "2367cc76-4467-4677-b22e-6bbbe5cdee7d",
+                  "admin": false,
+                  "name": "Victor",
+                  "email": "vepifanio1@gmail.com",
+                  "created_at": "2021-04-10T21:25:30.711Z",
+                  "updated_at": "2021-04-10T21:25:30.711Z"
+                }
+              }
+            }
+          }, 
+          "400": {
+            "description": "Email is already taken",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Email is already taken"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Users"],
+        "summary": "List all users",
+        "description": "List all users (need to be admin)",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "user_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All users listed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "admin": {
+                        "type": "boolean"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    }
+                  }
+                },
+                "example": [
+                  {
+                    "id": "2367cc76-4467-4677-b22e-6bbbe5cdee7d",
+                    "admin": false,
+                    "name": "Victor",
+                    "email": "vepifanio1@gmail.com",
+                    "created_at": "2021-04-10T21:25:30.711Z",
+                    "updated_at": "2021-04-10T21:25:30.711Z"
+                  },
+                  {
+                    "id": "2367cc76-4467-4677-b22e-6bbbe5cdee7d",
+                    "admin": true,
+                    "name": "Vitao",
+                    "email": "vitao@gmail.com",
+                    "created_at": "2021-04-10T21:25:30.711Z",
+                    "updated_at": "2021-04-10T21:25:42.624Z"
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "Error while processing list operation (User is not a admin or user with given ID not exists)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "User is not a Admin"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}/admin": {
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Turn user into admin",
+        "description": "Turns a normal user into a admin user",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "User ID (uuid)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User turned into admin successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "admin": {
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                },
+                "example": {
+                  "id": "2367cc76-4467-4677-b22e-6bbbe5cdee7d",
+                  "admin": true,
+                  "name": "Victor",
+                  "email": "vepifanio1@gmail.com",
+                  "created_at": "2021-04-10T21:25:30.711Z",
+                  "updated_at": "2021-04-10T21:25:30.711Z"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User with given id not exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "User not exists"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Show user",
+        "description": "Show the user with the given ID",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "User ID (uuid)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully returned the user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "admin": {
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                },
+                "example": {
+                  "id": "2367cc76-4467-4677-b22e-6bbbe5cdee7d",
+                  "admin": false,
+                  "name": "Victor",
+                  "email": "vepifanio1@gmail.com",
+                  "created_at": "2021-04-10T21:25:30.711Z",
+                  "updated_at": "2021-04-10T21:25:30.711Z"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User with given id not exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "User not exists"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
